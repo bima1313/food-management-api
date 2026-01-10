@@ -2,7 +2,7 @@
 
 ## Register Customer
 
-Endpoint : POST /api/customer
+Endpoint : POST /api/customers
 
 Request Body :
 
@@ -33,7 +33,7 @@ Response Body (Failed) :
 
 ## Login Customer
 
-Endpoint : POST /api/auth/customer/login
+Endpoint : POST /api/auth/customers/login
 
 Request Body :
 
@@ -50,6 +50,7 @@ Response Body (Success) :
 {
   "data": {
     "token": "TOKEN",    
+    "tokenExpiredAt": 1242146021 // long
   }
 }
 ```
@@ -64,7 +65,7 @@ Response Body (Failed, 401) :
 
 ## Get Customer
 
-Endpoint : GET /api/customer/${customerID}
+Endpoint : GET /api/customers/${customerID}
 
 Request Header :
 
@@ -92,7 +93,7 @@ Response Body (Failed, 401) :
 
 ## Update Customer
 
-Endpoint : PATCH /api/customer/${customerID}
+Endpoint : PATCH /api/customers/${customerID}
 
 Request Header :
 
@@ -130,7 +131,7 @@ Response Body (Failed, 401) :
 
 ## Logout Customer
 
-Endpoint : DELETE /api/auth/customer/logout
+Endpoint : DELETE /api/auth/customers/logout
 
 Request Header :
 
