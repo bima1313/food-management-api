@@ -21,6 +21,7 @@ import com.project.foodmarket.food_management.constants.CustomerConstants;
 import com.project.foodmarket.food_management.document.Customer;
 import com.project.foodmarket.food_management.model.CustomerLoginRequest;
 import com.project.foodmarket.food_management.model.CustomerResponse;
+import com.project.foodmarket.food_management.model.TokenResponse;
 import com.project.foodmarket.food_management.model.WebResponse;
 import com.project.foodmarket.food_management.repository.CustomerRepository;
 
@@ -115,9 +116,9 @@ public class AuthCustomerControllerTest {
                 .andExpectAll(
                         status().isOk())
                 .andDo(result -> {
-                    WebResponse<CustomerResponse> response = objectMapper.readValue(
+                    WebResponse<TokenResponse> response = objectMapper.readValue(
                             result.getResponse().getContentAsString(),
-                            new TypeReference<WebResponse<CustomerResponse>>() {
+                            new TypeReference<WebResponse<TokenResponse>>() {
                             });
 
                     assertNull(response.getError());
