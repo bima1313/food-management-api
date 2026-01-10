@@ -3,6 +3,7 @@ package com.project.foodmarket.food_management.controller.auth;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.foodmarket.food_management.constants.CustomerConstants;
+import com.project.foodmarket.food_management.document.Customer;
 import com.project.foodmarket.food_management.model.CustomerLoginRequest;
 import com.project.foodmarket.food_management.model.TokenResponse;
 import com.project.foodmarket.food_management.model.WebResponse;
@@ -14,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 @RestController
 public class AuthCustomerController {
@@ -29,4 +31,13 @@ public class AuthCustomerController {
         return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION).body(body);
     }
 
+    @DeleteMapping(
+        path = CustomerConstants.LOGOUT_PATH,
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public WebResponse<String> Logout(Customer customer) {
+        authService.logout(customer);
+        return WebResponse.<String>builder().data("OK").build();
+    }
+    
 }

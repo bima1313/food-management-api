@@ -52,4 +52,12 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
+    @Override
+    public void logout(Customer customer) {
+        customer.setToken(null);
+        customer.setTokenExpiredAt(0);
+        
+        customerRepository.save(customer);
+    }
+
 }
