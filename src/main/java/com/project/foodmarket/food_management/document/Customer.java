@@ -24,4 +24,6 @@ public class Customer {
     private String name;   
     
     private String token;
+
+    private long tokenExpiredAt;
 }
