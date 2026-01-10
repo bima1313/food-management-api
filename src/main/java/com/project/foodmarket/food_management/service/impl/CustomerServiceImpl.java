@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.project.foodmarket.food_management.configuration.MongoContextHolder;
 import com.project.foodmarket.food_management.document.Customer;
 import com.project.foodmarket.food_management.model.CustomerRegisterRequest;
+import com.project.foodmarket.food_management.model.CustomerResponse;
 import com.project.foodmarket.food_management.repository.CustomerRepository;
 import com.project.foodmarket.food_management.service.CustomerService;
 import com.project.foodmarket.food_management.service.ValidationService;
@@ -36,15 +37,24 @@ public class CustomerServiceImpl implements CustomerService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already registered");
         }
 
-        Customer user = new Customer();
-        user.setId(UUID.randomUUID().toString());
-        user.setEmail(request.getEmail());
-        user.setUsername(request.getUsername());
-        user.setPassword(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()));
-        user.setName(request.getName());
+        Customer customer = new Customer();
+        customer.setId(UUID.randomUUID().toString());
+        customer.setEmail(request.getEmail());
+        customer.setUsername(request.getUsername());
+        customer.setPassword(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()));
+        customer.setName(request.getName());
 
         MongoContextHolder.setDatabaseName("account");
-        userRepository.save(user);
+        userRepository.save(customer);
         MongoContextHolder.clear();
+    }
+
+    @Override
+    public CustomerResponse getCustomer(Customer customer) {
+        return CustomerResponse.builder()
+        .email(customer.getEmail())
+        .username(customer.getUsername())
+        .name(customer.getName())
+        .build();
     }
 }
