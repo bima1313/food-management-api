@@ -7,16 +7,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.project.foodmarket.food_management.resolver.CustomerArgumentResolver;
+import com.project.foodmarket.food_management.resolver.UserArgumentResolver;
 
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer {
     @Autowired
-    private CustomerArgumentResolver customerArgumentResolver;
+    private UserArgumentResolver userArgumentResolver;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         WebMvcConfigurer.super.addArgumentResolvers(resolvers);
-        resolvers.add(customerArgumentResolver);
+        resolvers.add(userArgumentResolver);
     }
 }
