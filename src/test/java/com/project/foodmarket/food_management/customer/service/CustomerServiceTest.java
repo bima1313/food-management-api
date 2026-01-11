@@ -1,4 +1,4 @@
-package com.project.foodmarket.food_management.service;
+package com.project.foodmarket.food_management.customer.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
