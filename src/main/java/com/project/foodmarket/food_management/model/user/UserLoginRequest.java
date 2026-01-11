@@ -1,4 +1,4 @@
-package com.project.foodmarket.food_management.model.customer;
+package com.project.foodmarket.food_management.model.user;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CustomerLoginRequest {
+public class UserLoginRequest {
     
     @NotBlank
     private String email;
