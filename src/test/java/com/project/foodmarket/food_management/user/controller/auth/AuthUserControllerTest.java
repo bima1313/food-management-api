@@ -1,4 +1,4 @@
-package com.project.foodmarket.food_management.customer.controller.auth;
+package com.project.foodmarket.food_management.user.controller.auth;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,51 +18,51 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.UUID;
 
-import com.project.foodmarket.food_management.constants.CustomerConstants;
-import com.project.foodmarket.food_management.document.Customer;
+import com.project.foodmarket.food_management.constants.UserConstants;
+import com.project.foodmarket.food_management.document.User;
 import com.project.foodmarket.food_management.model.TokenResponse;
 import com.project.foodmarket.food_management.model.WebResponse;
-import com.project.foodmarket.food_management.model.customer.CustomerLoginRequest;
-import com.project.foodmarket.food_management.model.customer.CustomerResponse;
-import com.project.foodmarket.food_management.model.customer.CustomerUpdateRequest;
-import com.project.foodmarket.food_management.repository.CustomerRepository;
+import com.project.foodmarket.food_management.model.user.UserLoginRequest;
+import com.project.foodmarket.food_management.model.user.UserResponse;
+import com.project.foodmarket.food_management.model.user.UserUpdateRequest;
+import com.project.foodmarket.food_management.repository.UserRepository;
 
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-public class AuthCustomerControllerTest {
+public class AuthUserControllerTest {
 
         @Autowired
         private MockMvc mockMvc;
 
         @Autowired
-        private CustomerRepository customerRepository;
+        private UserRepository userRepository;
 
         @Autowired
         private ObjectMapper objectMapper;
 
         @BeforeEach
         void setup() {
-                customerRepository.deleteAll();
+                userRepository.deleteAll();
         }
 
         @Test
-        void loginFailedCustomerNotFoundTest() throws Exception {
-                CustomerLoginRequest customerLoginRequest = new CustomerLoginRequest();
-                customerLoginRequest.setEmail("test@gmail.com");
-                customerLoginRequest.setPassword("secretPassword");
-                mockMvc.perform(post(CustomerConstants.LOGIN_PATH)
+        void loginFailedUserNotFoundTest() throws Exception {
+                UserLoginRequest userLoginRequest = new UserLoginRequest();
+                userLoginRequest.setEmail("test@gmail.com");
+                userLoginRequest.setPassword("secretPassword");
+                mockMvc.perform(post(UserConstants.LOGIN_PATH)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(customerLoginRequest)))
+                                .content(objectMapper.writeValueAsString(userLoginRequest)))
                                 .andExpectAll(
                                                 status().isUnauthorized())
                                 .andDo(result -> {
-                                        WebResponse<CustomerResponse> response = objectMapper.readValue(
+                                        WebResponse<UserResponse> response = objectMapper.readValue(
                                                         result.getResponse().getContentAsString(),
-                                                        new TypeReference<WebResponse<CustomerResponse>>() {
+                                                        new TypeReference<WebResponse<UserResponse>>() {
                                                         });
 
                                         assertNotNull(response.getError());
@@ -71,26 +71,26 @@ public class AuthCustomerControllerTest {
 
         @Test
         void loginFailedWrongPassword() throws Exception {
-                Customer customer = new Customer();
-                customer.setEmail("test@gmail.com");
-                customer.setPassword(BCrypt.hashpw("hello_world2026", BCrypt.gensalt()));
-                customer.setUsername("helloworld2026");
-                customer.setName("world");
-                customerRepository.save(customer);
+                User user = new User();
+                user.setEmail("test@gmail.com");
+                user.setPassword(BCrypt.hashpw("hello_world2026", BCrypt.gensalt()));
+                user.setUsername("helloworld2026");
+                user.setName("world");
+                userRepository.save(user);
 
-                CustomerLoginRequest customerLoginRequest = new CustomerLoginRequest();
-                customerLoginRequest.setEmail("test@gmail.com");
-                customerLoginRequest.setPassword("secretPassword");
-                mockMvc.perform(post(CustomerConstants.LOGIN_PATH)
+                UserLoginRequest userLoginRequest = new UserLoginRequest();
+                userLoginRequest.setEmail("test@gmail.com");
+                userLoginRequest.setPassword("secretPassword");
+                mockMvc.perform(post(UserConstants.LOGIN_PATH)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(customerLoginRequest)))
+                                .content(objectMapper.writeValueAsString(userLoginRequest)))
                                 .andExpectAll(
                                                 status().isUnauthorized())
                                 .andDo(result -> {
-                                        WebResponse<CustomerResponse> response = objectMapper.readValue(
+                                        WebResponse<UserResponse> response = objectMapper.readValue(
                                                         result.getResponse().getContentAsString(),
-                                                        new TypeReference<WebResponse<CustomerResponse>>() {
+                                                        new TypeReference<WebResponse<UserResponse>>() {
                                                         });
 
                                         assertNotNull(response.getError());
@@ -99,22 +99,22 @@ public class AuthCustomerControllerTest {
 
         @Test
         void loginSuccess() throws Exception {
-                Customer customer = new Customer();
-                customer.setId(UUID.randomUUID().toString());
-                customer.setEmail("test@gmail.com");
-                customer.setUsername("helloworld2026");
-                customer.setPassword(BCrypt.hashpw("secretPassword", BCrypt.gensalt()));
-                customer.setName("world");
-                customerRepository.save(customer);
+                User user = new User();
+                user.setId(UUID.randomUUID().toString());
+                user.setEmail("test@gmail.com");
+                user.setUsername("helloworld2026");
+                user.setPassword(BCrypt.hashpw("secretPassword", BCrypt.gensalt()));
+                user.setName("world");
+                userRepository.save(user);
 
-                CustomerLoginRequest customerLoginRequest = new CustomerLoginRequest();
-                customerLoginRequest.setEmail("test@gmail.com");
-                customerLoginRequest.setPassword("secretPassword");
+                UserLoginRequest userLoginRequest = new UserLoginRequest();
+                userLoginRequest.setEmail("test@gmail.com");
+                userLoginRequest.setPassword("secretPassword");
 
-                mockMvc.perform(post(CustomerConstants.LOGIN_PATH)
+                mockMvc.perform(post(UserConstants.LOGIN_PATH)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(customerLoginRequest)))
+                                .content(objectMapper.writeValueAsString(userLoginRequest)))
                                 .andExpectAll(
                                                 status().isOk())
                                 .andDo(result -> {
@@ -127,17 +127,17 @@ public class AuthCustomerControllerTest {
                                         assertNotNull(response.getData().getToken());
                                         assertNotNull(response.getData().getTokenExpiredAt());
 
-                                        Customer customerDb = customerRepository.findByEmail("test@gmail.com")
+                                        User userDb = userRepository.findByEmail("test@gmail.com")
                                                         .orElse(null);
 
-                                        assertNotNull(customerDb);
-                                        assertEquals(customerDb.getToken(), response.getData().getToken());
+                                        assertNotNull(userDb);
+                                        assertEquals(userDb.getToken(), response.getData().getToken());
                                 });
         }
 
         @Test
         void logoutFailed() throws Exception {
-                mockMvc.perform(delete(CustomerConstants.LOGOUT_PATH)
+                mockMvc.perform(delete(UserConstants.LOGOUT_PATH)
                                 .accept(MediaType.APPLICATION_JSON))
                                 .andExpectAll(
                                                 status().isUnauthorized())
@@ -152,20 +152,20 @@ public class AuthCustomerControllerTest {
 
         @Test
         void logoutSuccess() throws Exception {
-                Customer customer = new Customer();
-                customer.setId("test26138f");
-                customer.setEmail("test@gmail.com");
-                customer.setUsername("testhello");
-                customer.setPassword(BCrypt.hashpw("helloworld", BCrypt.gensalt()));
-                customer.setName("test2");
-                customer.setToken(
+                User user = new User();
+                user.setId("test26138f");
+                user.setEmail("test@gmail.com");
+                user.setUsername("testhello");
+                user.setPassword(BCrypt.hashpw("helloworld", BCrypt.gensalt()));
+                user.setName("test2");
+                user.setToken(
                                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxMTRzZmFhIiwiaXNzdWVyIjoiZm9vZC1tYXJrZXQiLCJzdWJqZWN0IjoidGVzdGhlbGxvIn0.uqcz2KXo52I_M2zp7yd9V8dyluifrG8yPNBs-2VeUnw");
-                customer.setTokenExpiredAt(System.currentTimeMillis() + 100000000L);
-                customerRepository.save(customer);
+                user.setTokenExpiredAt(System.currentTimeMillis() + 100000000L);
+                userRepository.save(user);
 
                 mockMvc.perform(
-                                delete(CustomerConstants.LOGOUT_PATH)
-                                                .header("Authorization", "Bearer " + customer.getToken())
+                                delete(UserConstants.LOGOUT_PATH)
+                                                .header("Authorization", "Bearer " + user.getToken())
                                                 .accept(MediaType.APPLICATION_JSON))
                                 .andExpectAll(
                                                 status().isOk())
@@ -177,40 +177,40 @@ public class AuthCustomerControllerTest {
                                         assertNull(response.getError());
                                         assertEquals("OK", response.getData());
 
-                                        Customer customerDb = customerRepository.findByEmail("test@gmail.com")
+                                        User userDb = userRepository.findByEmail("test@gmail.com")
                                                         .orElse(null);
 
-                                        assertNotNull(customerDb);
-                                        assertNull(customerDb.getToken());
-                                        assertEquals(0, customerDb.getTokenExpiredAt());
+                                        assertNotNull(userDb);
+                                        assertNull(userDb.getToken());
+                                        assertEquals(0, userDb.getTokenExpiredAt());
                                 });
         }
 
         @Test
-        void updateCustomerUnauthorized() throws Exception {
-                String customerId = "test26138f";
-                Customer customer = new Customer();
-                customer.setId(customerId);
-                customer.setEmail("test@gmail.com");
-                customer.setUsername("testhello");
-                customer.setPassword(BCrypt.hashpw("helloworld", BCrypt.gensalt()));
-                customer.setName("test2");
-                customer.setToken(
+        void updateUserUnauthorized() throws Exception {
+                String userId = "test26138f";
+                User user = new User();
+                user.setId(userId);
+                user.setEmail("test@gmail.com");
+                user.setUsername("testhello");
+                user.setPassword(BCrypt.hashpw("helloworld", BCrypt.gensalt()));
+                user.setName("test2");
+                user.setToken(
                                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxMTRzZmFhIiwiaXNzdWVyIjoiZm9vZC1tYXJrZXQiLCJzdWJqZWN0IjoidGVzdGhlbGxvIn0.uqcz2KXo52I_M2zp7yd9V8dyluifrG8yPNBs-2VeUnw");
-                customer.setTokenExpiredAt(System.currentTimeMillis() + 100000000L);
-                customerRepository.save(customer);
+                user.setTokenExpiredAt(System.currentTimeMillis() + 100000000L);
+                userRepository.save(user);
 
-                CustomerUpdateRequest request = new CustomerUpdateRequest();
+                UserUpdateRequest request = new UserUpdateRequest();
 
-                mockMvc.perform(patch(CustomerConstants.BASE_PATH + "/{id}", customerId)
+                mockMvc.perform(patch(UserConstants.BASE_PATH + "/{id}", userId)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request)))
                                 .andExpectAll(status().isUnauthorized())
                                 .andDo(result -> {
-                                        WebResponse<CustomerResponse> response = objectMapper.readValue(
+                                        WebResponse<UserResponse> response = objectMapper.readValue(
                                                         result.getResponse().getContentAsString(),
-                                                        new TypeReference<WebResponse<CustomerResponse>>() {
+                                                        new TypeReference<WebResponse<UserResponse>>() {
                                                         });
 
                                         assertNotNull(response.getError());
@@ -218,27 +218,27 @@ public class AuthCustomerControllerTest {
         }
 
         @Test
-        void updateCustomerFailedWrongEmailFormat() throws Exception {
-                String customerId = "test26138f";
-                Customer customer = new Customer();
-                customer.setId(customerId);
-                customer.setEmail("test@gmail.com");
-                customer.setUsername("testhello");
-                customer.setPassword(BCrypt.hashpw("helloworld", BCrypt.gensalt()));
-                customer.setName("test2");
-                customer.setToken(
+        void updateUserFailedWrongEmailFormat() throws Exception {
+                String userId = "test26138f";
+                User user = new User();
+                user.setId(userId);
+                user.setEmail("test@gmail.com");
+                user.setUsername("testhello");
+                user.setPassword(BCrypt.hashpw("helloworld", BCrypt.gensalt()));
+                user.setName("test2");
+                user.setToken(
                                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxMTRzZmFhIiwiaXNzdWVyIjoiZm9vZC1tYXJrZXQiLCJzdWJqZWN0IjoidGVzdGhlbGxvIn0.uqcz2KXo52I_M2zp7yd9V8dyluifrG8yPNBs-2VeUnw");
-                customer.setTokenExpiredAt(System.currentTimeMillis() + 100000000L);
-                customerRepository.save(customer);
+                user.setTokenExpiredAt(System.currentTimeMillis() + 100000000L);
+                userRepository.save(user);
 
-                CustomerUpdateRequest request = new CustomerUpdateRequest();
+                UserUpdateRequest request = new UserUpdateRequest();
                 request.setEmail("hello@gmailcom");
 
-                mockMvc.perform(patch(CustomerConstants.BASE_PATH + "/{id}", customerId)
+                mockMvc.perform(patch(UserConstants.BASE_PATH + "/{id}", userId)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
-                                .header("Authorization", "Bearer " + customer.getToken()))
+                                .header("Authorization", "Bearer " + user.getToken()))
                                 .andExpectAll(status().isBadRequest())
                                 .andDo(result -> {
                                         WebResponse<String> response = objectMapper.readValue(
@@ -251,62 +251,62 @@ public class AuthCustomerControllerTest {
         }
 
         @Test
-        void updateCustomerSuccess() throws Exception {
-                String customerId = "test26138f";
-                Customer customer = new Customer();
-                customer.setId(customerId);
-                customer.setEmail("test@gmail.com");
-                customer.setUsername("testhello");
-                customer.setPassword(BCrypt.hashpw("helloworld", BCrypt.gensalt()));
-                customer.setName("test2");
-                customer.setToken(
+        void updateUserSuccess() throws Exception {
+                String userId = "test26138f";
+                User user = new User();
+                user.setId(userId);
+                user.setEmail("test@gmail.com");
+                user.setUsername("testhello");
+                user.setPassword(BCrypt.hashpw("helloworld", BCrypt.gensalt()));
+                user.setName("test2");
+                user.setToken(
                                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxMTRzZmFhIiwiaXNzdWVyIjoiZm9vZC1tYXJrZXQiLCJzdWJqZWN0IjoidGVzdGhlbGxvIn0.uqcz2KXo52I_M2zp7yd9V8dyluifrG8yPNBs-2VeUnw");
-                customer.setTokenExpiredAt(System.currentTimeMillis() + 100000000L);
-                customerRepository.save(customer);
+                user.setTokenExpiredAt(System.currentTimeMillis() + 100000000L);
+                userRepository.save(user);
 
-                CustomerUpdateRequest request = new CustomerUpdateRequest();
+                UserUpdateRequest request = new UserUpdateRequest();
                 request.setEmail("hello@gmail.com");
                 request.setName("world");
                 request.setPassword("hello_world_2026");
 
-                mockMvc.perform(patch(CustomerConstants.BASE_PATH + "/{id}", customerId)
+                mockMvc.perform(patch(UserConstants.BASE_PATH + "/{id}", userId)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
-                                .header("Authorization", "Bearer " + customer.getToken()))
+                                .header("Authorization", "Bearer " + user.getToken()))
                                 .andExpectAll(status().isOk())
                                 .andDo(result -> {
-                                        WebResponse<CustomerResponse> response = objectMapper.readValue(
+                                        WebResponse<UserResponse> response = objectMapper.readValue(
                                                         result.getResponse().getContentAsString(),
-                                                        new TypeReference<WebResponse<CustomerResponse>>() {
+                                                        new TypeReference<WebResponse<UserResponse>>() {
                                                         });
 
                                         assertNull(response.getError());
                                         assertEquals("world", response.getData().getName());
                                         assertEquals("hello@gmail.com", response.getData().getEmail());
-                                        Customer customerDb = customerRepository.findByEmail("hello@gmail.com")
+                                        User userDb = userRepository.findByEmail("hello@gmail.com")
                                                         .orElse(null);
 
-                                        assertNotNull(customerDb);
-                                        assertTrue(BCrypt.checkpw("hello_world_2026", customerDb.getPassword()));
+                                        assertNotNull(userDb);
+                                        assertTrue(BCrypt.checkpw("hello_world_2026", userDb.getPassword()));
                                 });
         }
 
         @Test
         void deleteAccountFailed() throws Exception {
-                String customerId = "test26138f";
-                Customer customer = new Customer();
-                customer.setId(customerId);
-                customer.setEmail("test@gmail.com");
-                customer.setUsername("testhello");
-                customer.setPassword(BCrypt.hashpw("helloworld", BCrypt.gensalt()));
-                customer.setName("test2");
-                customer.setToken(
+                String userId = "test26138f";
+                User user = new User();
+                user.setId(userId);
+                user.setEmail("test@gmail.com");
+                user.setUsername("testhello");
+                user.setPassword(BCrypt.hashpw("helloworld", BCrypt.gensalt()));
+                user.setName("test2");
+                user.setToken(
                                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxMTRzZmFhIiwiaXNzdWVyIjoiZm9vZC1tYXJrZXQiLCJzdWJqZWN0IjoidGVzdGhlbGxvIn0.uqcz2KXo52I_M2zp7yd9V8dyluifrG8yPNBs-2VeUnw");
-                customer.setTokenExpiredAt(System.currentTimeMillis() + 100000000L);
-                customerRepository.save(customer);
+                user.setTokenExpiredAt(System.currentTimeMillis() + 100000000L);
+                userRepository.save(user);
 
-                mockMvc.perform(delete(CustomerConstants.DELETE_ACCOUNT_PATH + "/{id}", customerId)
+                mockMvc.perform(delete(UserConstants.DELETE_ACCOUNT_PATH + "/{id}", userId)
                                 .accept(MediaType.APPLICATION_JSON))
                                 .andExpectAll(
                                                 status().isUnauthorized())
@@ -321,21 +321,21 @@ public class AuthCustomerControllerTest {
 
         @Test
         void deleteAccountSuccess() throws Exception {
-                String customerId = "test26138f";
-                Customer customer = new Customer();
-                customer.setId(customerId);
-                customer.setEmail("test@gmail.com");
-                customer.setUsername("testhello");
-                customer.setPassword(BCrypt.hashpw("helloworld", BCrypt.gensalt()));
-                customer.setName("test2");
-                customer.setToken(
+                String userId = "test26138f";
+                User user = new User();
+                user.setId(userId);
+                user.setEmail("test@gmail.com");
+                user.setUsername("testhello");
+                user.setPassword(BCrypt.hashpw("helloworld", BCrypt.gensalt()));
+                user.setName("test2");
+                user.setToken(
                                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxMTRzZmFhIiwiaXNzdWVyIjoiZm9vZC1tYXJrZXQiLCJzdWJqZWN0IjoidGVzdGhlbGxvIn0.uqcz2KXo52I_M2zp7yd9V8dyluifrG8yPNBs-2VeUnw");
-                customer.setTokenExpiredAt(System.currentTimeMillis() + 100000000L);
-                customerRepository.save(customer);
+                user.setTokenExpiredAt(System.currentTimeMillis() + 100000000L);
+                userRepository.save(user);
 
                 mockMvc.perform(
-                                delete(CustomerConstants.DELETE_ACCOUNT_PATH + "/{id}", customerId)
-                                                .header("Authorization", "Bearer " + customer.getToken())
+                                delete(UserConstants.DELETE_ACCOUNT_PATH + "/{id}", userId)
+                                                .header("Authorization", "Bearer " + user.getToken())
                                                 .accept(MediaType.APPLICATION_JSON))
                                 .andExpectAll(
                                                 status().isOk())
@@ -347,10 +347,10 @@ public class AuthCustomerControllerTest {
                                         assertNull(response.getError());
                                         assertEquals("OK", response.getData());
 
-                                        Customer customerDb = customerRepository.findByEmail("test@gmail.com")
+                                        User userDb = userRepository.findByEmail("test@gmail.com")
                                                         .orElse(null);
 
-                                        assertNull(customerDb);
+                                        assertNull(userDb);
                                 });
         }
 }
