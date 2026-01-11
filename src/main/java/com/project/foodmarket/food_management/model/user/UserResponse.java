@@ -1,4 +1,4 @@
-package com.project.foodmarket.food_management.model.customer;
+package com.project.foodmarket.food_management.model.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CustomerResponse {
+public class UserResponse {
 
     private String email;
 

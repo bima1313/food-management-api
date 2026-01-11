@@ -12,20 +12,20 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.project.foodmarket.food_management.configuration.MongoContextHolder;
-import com.project.foodmarket.food_management.document.Customer;
-import com.project.foodmarket.food_management.repository.CustomerRepository;
+import com.project.foodmarket.food_management.document.User;
+import com.project.foodmarket.food_management.repository.UserRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 @Component
-public class CustomerArgumentResolver implements HandlerMethodArgumentResolver {
+public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserRepository userRepository;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return Customer.class.equals(parameter.getParameterType());
+        return User.class.equals(parameter.getParameterType());
     }
 
     @Override
@@ -41,13 +41,13 @@ public class CustomerArgumentResolver implements HandlerMethodArgumentResolver {
         String token = bearerToken.substring(7);
 
         MongoContextHolder.setDatabaseName("account");
-        Customer customer = customerRepository.findFirstByToken(token)
+        User user = userRepository.findFirstByToken(token)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized"));
-        if (customer.getTokenExpiredAt() < System.currentTimeMillis()) {
+        if (user.getTokenExpiredAt() < System.currentTimeMillis()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
         }
         
-        return customer;
+        return user;
     }
 
 }

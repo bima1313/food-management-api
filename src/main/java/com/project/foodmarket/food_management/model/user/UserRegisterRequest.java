@@ -1,4 +1,4 @@
-package com.project.foodmarket.food_management.model.customer;
+package com.project.foodmarket.food_management.model.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CustomerRegisterRequest {
+public class UserRegisterRequest {
     
     @NotBlank
     @Size(min = 4, max = 100)

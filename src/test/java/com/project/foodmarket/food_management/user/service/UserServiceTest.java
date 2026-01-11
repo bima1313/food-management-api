@@ -1,4 +1,4 @@
-package com.project.foodmarket.food_management.customer.service;
+package com.project.foodmarket.food_management.user.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,42 +17,42 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.UUID;
 
-import com.project.foodmarket.food_management.constants.CustomerConstants;
-import com.project.foodmarket.food_management.document.Customer;
+import com.project.foodmarket.food_management.constants.UserConstants;
+import com.project.foodmarket.food_management.document.User;
 import com.project.foodmarket.food_management.model.WebResponse;
-import com.project.foodmarket.food_management.model.customer.CustomerRegisterRequest;
-import com.project.foodmarket.food_management.model.customer.CustomerResponse;
-import com.project.foodmarket.food_management.repository.CustomerRepository;
+import com.project.foodmarket.food_management.model.user.UserRegisterRequest;
+import com.project.foodmarket.food_management.model.user.UserResponse;
+import com.project.foodmarket.food_management.repository.UserRepository;
 
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-public class CustomerServiceTest {
+public class UserServiceTest {
 
         @Autowired
         private MockMvc mockMvc;
 
         @Autowired
-        private CustomerRepository customerRepository;
+        private UserRepository userRepository;
 
         @Autowired
         private ObjectMapper objectMapper;
 
         @BeforeEach
         void setup() {
-                customerRepository.deleteAll();
+                userRepository.deleteAll();
         }
 
         @Test
         void registerBadRequestTest() throws Exception {
-                CustomerRegisterRequest customerRegisterRequest = new CustomerRegisterRequest();
+                UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
 
-                mockMvc.perform(post(CustomerConstants.BASE_PATH)
+                mockMvc.perform(post(UserConstants.BASE_PATH)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(customerRegisterRequest))).andExpectAll(
+                                .content(objectMapper.writeValueAsString(userRegisterRequest))).andExpectAll(
                                                 status().isBadRequest())
                                 .andDo(result -> {
                                         WebResponse<String> response = objectMapper.readValue(
@@ -66,16 +66,16 @@ public class CustomerServiceTest {
 
         @Test
         void registerNotEmailFormatTest() throws Exception {
-                CustomerRegisterRequest customerRegisterRequest = new CustomerRegisterRequest();
-                customerRegisterRequest.setEmail("test2gmail.com");
-                customerRegisterRequest.setUsername("test8252ad");
-                customerRegisterRequest.setPassword("hello41223");
-                customerRegisterRequest.setName("world");
+                UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+                userRegisterRequest.setEmail("test2gmail.com");
+                userRegisterRequest.setUsername("test8252ad");
+                userRegisterRequest.setPassword("hello41223");
+                userRegisterRequest.setName("world");
 
-                mockMvc.perform(post(CustomerConstants.BASE_PATH)
+                mockMvc.perform(post(UserConstants.BASE_PATH)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(customerRegisterRequest))).andExpectAll(
+                                .content(objectMapper.writeValueAsString(userRegisterRequest))).andExpectAll(
                                                 status().isBadRequest())
                                 .andDo(result -> {
                                         WebResponse<String> response = objectMapper.readValue(
@@ -88,24 +88,24 @@ public class CustomerServiceTest {
 
         @Test
         void registerDuplicateUsernameTest() throws Exception {
-                Customer customer = new Customer();
-                customer.setId(UUID.randomUUID().toString());
-                customer.setEmail("helo@gmail.com");
-                customer.setPassword(BCrypt.hashpw("7432gdsgsfav", BCrypt.gensalt()));
-                customer.setUsername("test8252ad");
-                customer.setName("hello");
-                customerRepository.save(customer);
+                User user = new User();
+                user.setId(UUID.randomUUID().toString());
+                user.setEmail("helo@gmail.com");
+                user.setPassword(BCrypt.hashpw("7432gdsgsfav", BCrypt.gensalt()));
+                user.setUsername("test8252ad");
+                user.setName("hello");
+                userRepository.save(user);
 
-                CustomerRegisterRequest customerRegisterRequest = new CustomerRegisterRequest();
-                customerRegisterRequest.setEmail("test2@gmail.com");
-                customerRegisterRequest.setUsername("test8252ad");
-                customerRegisterRequest.setPassword("hello41223");
-                customerRegisterRequest.setName("world");
+                UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+                userRegisterRequest.setEmail("test2@gmail.com");
+                userRegisterRequest.setUsername("test8252ad");
+                userRegisterRequest.setPassword("hello41223");
+                userRegisterRequest.setName("world");
 
-                mockMvc.perform(post(CustomerConstants.BASE_PATH)
+                mockMvc.perform(post(UserConstants.BASE_PATH)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(customerRegisterRequest))).andExpectAll(
+                                .content(objectMapper.writeValueAsString(userRegisterRequest))).andExpectAll(
                                                 status().isBadRequest())
                                 .andDo(result -> {
                                         WebResponse<String> response = objectMapper.readValue(
@@ -119,15 +119,15 @@ public class CustomerServiceTest {
 
         @Test
         void registerSuccessTest() throws Exception {
-                CustomerRegisterRequest customerRegisterRequest = new CustomerRegisterRequest();
-                customerRegisterRequest.setEmail("test2@gmail.com");
-                customerRegisterRequest.setUsername("test8252ad");
-                customerRegisterRequest.setPassword(BCrypt.hashpw("hello41223", BCrypt.gensalt()));
-                customerRegisterRequest.setName("world");
+                UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+                userRegisterRequest.setEmail("test2@gmail.com");
+                userRegisterRequest.setUsername("test8252ad");
+                userRegisterRequest.setPassword(BCrypt.hashpw("hello41223", BCrypt.gensalt()));
+                userRegisterRequest.setName("world");
 
-                mockMvc.perform(post(CustomerConstants.BASE_PATH).accept(MediaType.APPLICATION_JSON)
+                mockMvc.perform(post(UserConstants.BASE_PATH).accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(customerRegisterRequest)))
+                                .content(objectMapper.writeValueAsString(userRegisterRequest)))
                                 .andExpectAll(status().isOk()).andDo(result -> {
                                         WebResponse<String> response = objectMapper.readValue(
                                                         result.getResponse().getContentAsString(),
@@ -140,9 +140,9 @@ public class CustomerServiceTest {
         }
 
         @Test
-        void getCustomerUnauthorized() throws Exception {
+        void getUserUnauthorized() throws Exception {
                 String id = "test26138f";
-                mockMvc.perform(get(CustomerConstants.BASE_PATH + "/{id}", id)
+                mockMvc.perform(get(UserConstants.BASE_PATH + "/{id}", id)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .header("Authorization",
                                                 "not found"))
@@ -158,9 +158,9 @@ public class CustomerServiceTest {
         }
 
         @Test
-        void getCustomerUnauthorizedTokenNotSend() throws Exception {
+        void getUserUnauthorizedTokenNotSend() throws Exception {
                 String id = "test26138f";
-                mockMvc.perform(get(CustomerConstants.BASE_PATH + "/{id}", id)
+                mockMvc.perform(get(UserConstants.BASE_PATH + "/{id}", id)
                                 .accept(MediaType.APPLICATION_JSON))
                                 .andExpectAll(status().isUnauthorized())
                                 .andDo(result -> {
@@ -174,26 +174,26 @@ public class CustomerServiceTest {
         }
 
         @Test
-        void getCustomerSuccess() throws Exception {
+        void getUserSuccess() throws Exception {
                 String id = "test26138f";
-                Customer customer = new Customer();
-                customer.setId(id);
-                customer.setUsername("testhello");
-                customer.setPassword(BCrypt.hashpw("world", BCrypt.gensalt()));
-                customer.setName("test2");
-                customer.setToken(
+                User user = new User();
+                user.setId(id);
+                user.setUsername("testhello");
+                user.setPassword(BCrypt.hashpw("world", BCrypt.gensalt()));
+                user.setName("test2");
+                user.setToken(
                                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxMTRzZmFhIiwiaXNzdWVyIjoiZm9vZC1tYXJrZXQiLCJzdWJqZWN0IjoidGVzdGhlbGxvIn0.uqcz2KXo52I_M2zp7yd9V8dyluifrG8yPNBs-2VeUnw");
-                customer.setTokenExpiredAt(System.currentTimeMillis() + 100000000L);
-                customerRepository.save(customer);
+                user.setTokenExpiredAt(System.currentTimeMillis() + 100000000L);
+                userRepository.save(user);
 
-                mockMvc.perform(get(CustomerConstants.BASE_PATH + "/{id}", id)
+                mockMvc.perform(get(UserConstants.BASE_PATH + "/{id}", id)
                                 .accept(MediaType.APPLICATION_JSON)
-                                .header("Authorization", "Bearer " + customer.getToken()))
+                                .header("Authorization", "Bearer " + user.getToken()))
                                 .andExpectAll(status().isOk())
                                 .andDo(result -> {
-                                        WebResponse<CustomerResponse> response = objectMapper.readValue(
+                                        WebResponse<UserResponse> response = objectMapper.readValue(
                                                         result.getResponse().getContentAsString(),
-                                                        new TypeReference<WebResponse<CustomerResponse>>() {
+                                                        new TypeReference<WebResponse<UserResponse>>() {
                                                         });
 
                                         assertNull(response.getError());
@@ -203,21 +203,21 @@ public class CustomerServiceTest {
         }
 
         @Test
-        void getTokenCustomerExpired() throws Exception {
+        void getTokenUserExpired() throws Exception {
                 String id = "test26138f";
-                Customer customer = new Customer();
-                customer.setId(id);
-                customer.setUsername("testhello");
-                customer.setPassword(BCrypt.hashpw("world", BCrypt.gensalt()));
-                customer.setName("test2");
-                customer.setToken(
+                User user = new User();
+                user.setId(id);
+                user.setUsername("testhello");
+                user.setPassword(BCrypt.hashpw("world", BCrypt.gensalt()));
+                user.setName("test2");
+                user.setToken(
                                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxMTRzZmFhIiwiaXNzdWVyIjoiZm9vZC1tYXJrZXQiLCJzdWJqZWN0IjoidGVzdGhlbGxvIn0.uqcz2KXo52I_M2zp7yd9V8dyluifrG8yPNBs-2VeUnw");
-                customer.setTokenExpiredAt(System.currentTimeMillis() - 100000000L);
-                customerRepository.save(customer);
+                user.setTokenExpiredAt(System.currentTimeMillis() - 100000000L);
+                userRepository.save(user);
 
-                mockMvc.perform(get(CustomerConstants.BASE_PATH + "/{id}", id)
+                mockMvc.perform(get(UserConstants.BASE_PATH + "/{id}", id)
                                 .accept(MediaType.APPLICATION_JSON)
-                                .header("Authorization","Bearer " + customer.getToken()))
+                                .header("Authorization","Bearer " + user.getToken()))
                                 .andExpectAll(status().isUnauthorized())
                                 .andDo(result -> {
                                         WebResponse<String> response = objectMapper.readValue(

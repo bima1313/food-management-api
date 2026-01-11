@@ -1,8 +1,8 @@
-# Customer API Spec
+# User API Spec
 
-## Register Customer
+## Register User
 
-Endpoint : POST /api/customers
+Endpoint : POST /api/users
 
 Request Body :
 
@@ -31,9 +31,9 @@ Response Body (Failed) :
 }
 ```
 
-## Login Customer
+## Login User
 
-Endpoint : POST /api/auth/customers/login
+Endpoint : POST /api/auth/users/login
 
 Request Body :
 
@@ -63,9 +63,9 @@ Response Body (Failed, 401) :
 }
 ```
 
-## Get Customer
+## Get User
 
-Endpoint : GET /api/customers/{customerID}
+Endpoint : GET /api/users/{userID}
 
 Request Header :
 
@@ -91,9 +91,9 @@ Response Body (Failed, 401) :
 }
 ```
 
-## Update Customer
+## Update User
 
-Endpoint : PATCH /api/customers/{customerID}
+Endpoint : PATCH /api/users/{userID}
 
 Request Header :
 
@@ -129,7 +129,7 @@ Response Body (Failed, 401) :
 }
 ```
 
-## Logout Customer
+## Logout User
 
 Endpoint : DELETE /api/auth/logout
 
@@ -145,9 +145,9 @@ Response Body (Success) :
 }
 ```
 
-## Delete Customer
+## Delete User
 
-Endpoint : DELETE /api/auth/{customerID}
+Endpoint : DELETE /api/auth/{userID}
 
 Request Header :
 

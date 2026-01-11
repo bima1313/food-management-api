@@ -3,6 +3,8 @@ package com.project.foodmarket.food_management.document;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.project.foodmarket.food_management.enums.RoleEnum;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,8 +12,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document
-public class Customer {
+@Document(collection = "user")
+public class User {
     @Id
     private String id;
 
@@ -26,4 +28,6 @@ public class Customer {
     private String token;
 
     private long tokenExpiredAt;
+
+    private RoleEnum role;
 }
