@@ -65,7 +65,7 @@ Response Body (Failed, 401) :
 
 ## Get Customer
 
-Endpoint : GET /api/customers/${customerID}
+Endpoint : GET /api/customers/{customerID}
 
 Request Header :
 
@@ -93,7 +93,7 @@ Response Body (Failed, 401) :
 
 ## Update Customer
 
-Endpoint : PATCH /api/customers/${customerID}
+Endpoint : PATCH /api/customers/{customerID}
 
 Request Header :
 
@@ -131,7 +131,23 @@ Response Body (Failed, 401) :
 
 ## Logout Customer
 
-Endpoint : DELETE /api/auth/customers/logout
+Endpoint : DELETE /api/auth/logout
+
+Request Header :
+
+- Authorization : Bearer Token (Mandatory)
+
+Response Body (Success) :
+
+```json
+{
+  "data": "OK"
+}
+```
+
+## Delete Customer
+
+Endpoint : DELETE /api/auth/{customerID}
 
 Request Header :
 
