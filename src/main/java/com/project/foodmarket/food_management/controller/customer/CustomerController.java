@@ -1,13 +1,13 @@
-package com.project.foodmarket.food_management.controller;
+package com.project.foodmarket.food_management.controller.customer;
 
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.foodmarket.food_management.constants.CustomerConstants;
 import com.project.foodmarket.food_management.document.Customer;
-import com.project.foodmarket.food_management.model.CustomerRegisterRequest;
-import com.project.foodmarket.food_management.model.CustomerResponse;
 import com.project.foodmarket.food_management.model.WebResponse;
-import com.project.foodmarket.food_management.service.CustomerService;
+import com.project.foodmarket.food_management.model.customer.CustomerRegisterRequest;
+import com.project.foodmarket.food_management.model.customer.CustomerResponse;
+import com.project.foodmarket.food_management.service.customer.CustomerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

@@ -1,13 +1,13 @@
-package com.project.foodmarket.food_management.controller.auth;
+package com.project.foodmarket.food_management.controller.customer.auth;
 
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.foodmarket.food_management.constants.CustomerConstants;
 import com.project.foodmarket.food_management.document.Customer;
-import com.project.foodmarket.food_management.model.CustomerLoginRequest;
 import com.project.foodmarket.food_management.model.TokenResponse;
 import com.project.foodmarket.food_management.model.WebResponse;
-import com.project.foodmarket.food_management.service.AuthService;
+import com.project.foodmarket.food_management.model.customer.CustomerLoginRequest;
+import com.project.foodmarket.food_management.service.customer.AuthService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
