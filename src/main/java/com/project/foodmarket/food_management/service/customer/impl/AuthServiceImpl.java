@@ -33,10 +33,9 @@ public class AuthServiceImpl implements AuthService {
         Customer customer = customerRepository.findByEmail(request.getEmail()).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email and Password was wrong"));
 
-        if (BCrypt.checkpw(request.getPassword(), customer.getPassword())) {            
-            
+        if (BCrypt.checkpw(request.getPassword(), customer.getPassword())) {
 
-            String token = jwtService.generateToken("customer", customer.getUsername(),
+            String token = jwtService.generateToken("customer", customer.getId(), customer.getUsername(),
                     ExpirationUtils.calculateTokenExpiredDate(7));
 
             customer.setToken(token);
@@ -56,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
     public void logout(Customer customer) {
         customer.setToken(null);
         customer.setTokenExpiredAt(0);
-        
+
         customerRepository.save(customer);
     }
 

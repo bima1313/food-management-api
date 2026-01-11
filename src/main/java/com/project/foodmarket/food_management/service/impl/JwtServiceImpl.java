@@ -4,11 +4,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import javax.crypto.SecretKey;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.project.foodmarket.food_management.repository.CustomerRepository;
 import com.project.foodmarket.food_management.service.JwtService;
 
 import io.jsonwebtoken.Jwts;
@@ -17,24 +15,21 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtServiceImpl implements JwtService {
 
-    @Autowired
-    private CustomerRepository customerRepository;
-
-    @Value("${app.secret.key}")
+    @Value("${spring.application.name}")
     private String secretString;
 
     @Override
     public String generateToken(
             String targetApplication,
-            String customerUsername,
+            String id,
+            String username,
             long tokenExpired) {
-
-        String customerId = customerRepository.findByUsername(customerUsername).getId();
+        
         SecretKey key = Keys.hmacShaKeyFor(secretString.getBytes(StandardCharsets.UTF_16));
         return Jwts.builder()
-                .id(customerId)
+                .id(id)
                 .issuer("food-market")
-                .subject(customerUsername)
+                .subject(username)
                 .audience().add(targetApplication).and()
                 .expiration(new Date(tokenExpired))
                 .notBefore(new Date(System.currentTimeMillis()))
