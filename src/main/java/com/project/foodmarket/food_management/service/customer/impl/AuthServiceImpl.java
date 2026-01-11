@@ -1,4 +1,4 @@
-package com.project.foodmarket.food_management.service.impl;
+package com.project.foodmarket.food_management.service.customer.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,12 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.project.foodmarket.food_management.document.Customer;
-import com.project.foodmarket.food_management.model.CustomerLoginRequest;
 import com.project.foodmarket.food_management.model.TokenResponse;
+import com.project.foodmarket.food_management.model.customer.CustomerLoginRequest;
 import com.project.foodmarket.food_management.repository.CustomerRepository;
-import com.project.foodmarket.food_management.service.AuthService;
 import com.project.foodmarket.food_management.service.JwtService;
 import com.project.foodmarket.food_management.service.ValidationService;
+import com.project.foodmarket.food_management.service.customer.AuthService;
 import com.project.foodmarket.utils.ExpirationUtils;
 
 @Service

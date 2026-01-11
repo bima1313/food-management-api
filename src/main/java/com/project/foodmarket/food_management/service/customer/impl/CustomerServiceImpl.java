@@ -1,4 +1,4 @@
-package com.project.foodmarket.food_management.service.impl;
+package com.project.foodmarket.food_management.service.customer.impl;
 
 import java.util.UUID;
 
@@ -11,11 +11,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.project.foodmarket.food_management.configuration.MongoContextHolder;
 import com.project.foodmarket.food_management.document.Customer;
-import com.project.foodmarket.food_management.model.CustomerRegisterRequest;
-import com.project.foodmarket.food_management.model.CustomerResponse;
+import com.project.foodmarket.food_management.model.customer.CustomerRegisterRequest;
+import com.project.foodmarket.food_management.model.customer.CustomerResponse;
 import com.project.foodmarket.food_management.repository.CustomerRepository;
-import com.project.foodmarket.food_management.service.CustomerService;
 import com.project.foodmarket.food_management.service.ValidationService;
+import com.project.foodmarket.food_management.service.customer.CustomerService;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {

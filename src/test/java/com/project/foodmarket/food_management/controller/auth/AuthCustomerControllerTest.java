@@ -19,10 +19,10 @@ import java.util.UUID;
 
 import com.project.foodmarket.food_management.constants.CustomerConstants;
 import com.project.foodmarket.food_management.document.Customer;
-import com.project.foodmarket.food_management.model.CustomerLoginRequest;
-import com.project.foodmarket.food_management.model.CustomerResponse;
 import com.project.foodmarket.food_management.model.TokenResponse;
 import com.project.foodmarket.food_management.model.WebResponse;
+import com.project.foodmarket.food_management.model.customer.CustomerLoginRequest;
+import com.project.foodmarket.food_management.model.customer.CustomerResponse;
 import com.project.foodmarket.food_management.repository.CustomerRepository;
 
 import tools.jackson.core.type.TypeReference;
