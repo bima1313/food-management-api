@@ -1,4 +1,4 @@
-package com.project.foodmarket.food_management.controller.auth;
+package com.project.foodmarket.food_management.customer.controller.auth;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
