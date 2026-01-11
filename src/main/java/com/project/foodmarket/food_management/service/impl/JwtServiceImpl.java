@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.foodmarket.food_management.service.JwtService;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
@@ -24,7 +25,7 @@ public class JwtServiceImpl implements JwtService {
             String id,
             String username,
             long tokenExpired) {
-        
+
         SecretKey key = Keys.hmacShaKeyFor(secretString.getBytes(StandardCharsets.UTF_16));
         return Jwts.builder()
                 .id(id)
@@ -35,6 +36,24 @@ public class JwtServiceImpl implements JwtService {
                 .notBefore(new Date(System.currentTimeMillis()))
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .signWith(key).compact();
+    }
+
+    @Override
+    public String getUserId(String token) {
+        SecretKey key = Keys.hmacShaKeyFor(secretString.getBytes(StandardCharsets.UTF_16));
+
+        Claims claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
+
+        return claims.getId();
+    }
+
+    @Override
+    public long getExpiration(String token) {
+        SecretKey key = Keys.hmacShaKeyFor(secretString.getBytes(StandardCharsets.UTF_16));
+
+        Claims claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
+        
+        return claims.getExpiration().getTime();
     }
 
 }
