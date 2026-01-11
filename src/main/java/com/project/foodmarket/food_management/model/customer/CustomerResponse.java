@@ -1,4 +1,4 @@
-package com.project.foodmarket.food_management.model;
+package com.project.foodmarket.food_management.model.customer;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
