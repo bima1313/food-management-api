@@ -1,5 +1,7 @@
 package com.project.foodmarket.food_management.service.customer.impl;
 
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -10,6 +12,8 @@ import org.springframework.web.server.ResponseStatusException;
 import com.project.foodmarket.food_management.document.Customer;
 import com.project.foodmarket.food_management.model.TokenResponse;
 import com.project.foodmarket.food_management.model.customer.CustomerLoginRequest;
+import com.project.foodmarket.food_management.model.customer.CustomerResponse;
+import com.project.foodmarket.food_management.model.customer.CustomerUpdateRequest;
 import com.project.foodmarket.food_management.repository.CustomerRepository;
 import com.project.foodmarket.food_management.service.JwtService;
 import com.project.foodmarket.food_management.service.ValidationService;
@@ -57,6 +61,30 @@ public class AuthServiceImpl implements AuthService {
         customer.setTokenExpiredAt(0);
 
         customerRepository.save(customer);
+    }
+
+    @Override
+    public CustomerResponse update(Customer customer, CustomerUpdateRequest request) {
+        validationService.validate(request);
+
+        if (Objects.nonNull(request.getEmail())) {
+            customer.setEmail(request.getEmail());
+        }
+        if (Objects.nonNull(request.getPassword())) {
+            customer.setPassword(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()));
+        }
+        if (Objects.nonNull(request.getName())) {
+            customer.setName(request.getName());
+        }
+
+        customerRepository.save(customer);
+
+        return CustomerResponse
+                .builder()
+                .email(customer.getEmail())
+                .username(customer.getUsername())
+                .name(customer.getName())
+                .build();
     }
 
 }

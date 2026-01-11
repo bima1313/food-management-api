@@ -5,8 +5,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.project.foodmarket.food_management.document.Customer;
 import com.project.foodmarket.food_management.model.TokenResponse;
 import com.project.foodmarket.food_management.model.customer.CustomerLoginRequest;
+import com.project.foodmarket.food_management.model.customer.CustomerResponse;
+import com.project.foodmarket.food_management.model.customer.CustomerUpdateRequest;
 
 public interface AuthService {
     public TokenResponse login(@RequestBody CustomerLoginRequest request);
     public void logout(Customer customer);
+    public CustomerResponse update(Customer customer, @RequestBody CustomerUpdateRequest request);
 }
