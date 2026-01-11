@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.project.foodmarket.food_management.configuration.MongoContextHolder;
 import com.project.foodmarket.food_management.document.Customer;
 import com.project.foodmarket.food_management.model.TokenResponse;
 import com.project.foodmarket.food_management.model.customer.CustomerLoginRequest;
@@ -34,6 +35,8 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public TokenResponse login(CustomerLoginRequest request) {
         validationService.validate(request);
+        MongoContextHolder.setDatabaseName("account");
+
         Customer customer = customerRepository.findByEmail(request.getEmail()).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email and Password was wrong"));
 
@@ -46,6 +49,7 @@ public class AuthServiceImpl implements AuthService {
             customer.setTokenExpiredAt(ExpirationUtils.calculateTokenExpiredDate(7));
             customerRepository.save(customer);
 
+            MongoContextHolder.clear();
             return TokenResponse.builder()
                     .token(customer.getToken())
                     .tokenExpiredAt(customer.getTokenExpiredAt())
@@ -61,6 +65,7 @@ public class AuthServiceImpl implements AuthService {
         customer.setTokenExpiredAt(0);
 
         customerRepository.save(customer);
+        MongoContextHolder.clear();
     }
 
     @Override
@@ -78,7 +83,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         customerRepository.save(customer);
-
+        MongoContextHolder.clear();
         return CustomerResponse
                 .builder()
                 .email(customer.getEmail())

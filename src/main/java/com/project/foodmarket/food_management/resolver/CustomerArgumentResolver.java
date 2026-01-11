@@ -11,6 +11,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.project.foodmarket.food_management.configuration.MongoContextHolder;
 import com.project.foodmarket.food_management.document.Customer;
 import com.project.foodmarket.food_management.repository.CustomerRepository;
 
@@ -23,7 +24,7 @@ public class CustomerArgumentResolver implements HandlerMethodArgumentResolver {
     private CustomerRepository customerRepository;
 
     @Override
-    public boolean supportsParameter(MethodParameter parameter) {        
+    public boolean supportsParameter(MethodParameter parameter) {
         return Customer.class.equals(parameter.getParameterType());
     }
 
@@ -31,18 +32,22 @@ public class CustomerArgumentResolver implements HandlerMethodArgumentResolver {
     public @Nullable Object resolveArgument(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer,
             NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest servletRequest = (HttpServletRequest) webRequest.getNativeRequest();
-        String bearerToken = servletRequest.getHeader("Authorization");        
-        if (bearerToken == null || !bearerToken.contains("Bearer ")){
+        String bearerToken = servletRequest.getHeader("Authorization");
+
+        if (bearerToken == null || !bearerToken.contains("Bearer ")) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
         }
 
         String token = bearerToken.substring(7);
-        Customer customer = customerRepository.findFirstByToken(token).orElseThrow( () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized"));     
+
+        MongoContextHolder.setDatabaseName("account");
+        Customer customer = customerRepository.findFirstByToken(token)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized"));
         if (customer.getTokenExpiredAt() < System.currentTimeMillis()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
         }
-
+        
         return customer;
     }
-    
+
 }
