@@ -140,7 +140,7 @@ public class CustomerServiceTest {
         }
 
         @Test
-        void getUserUnauthorized() throws Exception {
+        void getCustomerUnauthorized() throws Exception {
                 String id = "test26138f";
                 mockMvc.perform(get(CustomerConstants.BASE_PATH + "/{id}", id)
                                 .accept(MediaType.APPLICATION_JSON)
@@ -158,7 +158,7 @@ public class CustomerServiceTest {
         }
 
         @Test
-        void getUserUnauthorizedTokenNotSend() throws Exception {
+        void getCustomerUnauthorizedTokenNotSend() throws Exception {
                 String id = "test26138f";
                 mockMvc.perform(get(CustomerConstants.BASE_PATH + "/{id}", id)
                                 .accept(MediaType.APPLICATION_JSON))
@@ -174,7 +174,7 @@ public class CustomerServiceTest {
         }
 
         @Test
-        void getUserSuccess() throws Exception {
+        void getCustomerSuccess() throws Exception {
                 String id = "test26138f";
                 Customer customer = new Customer();
                 customer.setId(id);
@@ -203,7 +203,7 @@ public class CustomerServiceTest {
         }
 
         @Test
-        void getTokenUserExpired() throws Exception {
+        void getTokenCustomerExpired() throws Exception {
                 String id = "test26138f";
                 Customer customer = new Customer();
                 customer.setId(id);

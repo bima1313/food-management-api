@@ -92,4 +92,11 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
+    @Override
+    public void deleteAccountCustomer(Customer customer) {
+        customerRepository.delete(customer);
+        MongoContextHolder.clear();
+    }
+
+
 }

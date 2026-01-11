@@ -35,12 +35,6 @@ public class AuthCustomerController {
         return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION).body(body);
     }
 
-    @DeleteMapping(path = CustomerConstants.LOGOUT_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
-    public WebResponse<String> Logout(Customer customer) {
-        authService.logout(customer);
-        return WebResponse.<String>builder().data("OK").build();
-    }
-
     @PatchMapping(path = CustomerConstants.BASE_PATH
             + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public WebResponse<CustomerResponse> update(Customer customer, @PathVariable String id,
@@ -49,4 +43,17 @@ public class AuthCustomerController {
 
         return WebResponse.<CustomerResponse>builder().data(updateResponse).build();
     }
+
+    @DeleteMapping(path = CustomerConstants.LOGOUT_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
+    public WebResponse<String> Logout(Customer customer) {
+        authService.logout(customer);
+        return WebResponse.<String>builder().data("OK").build();
+    }
+
+    @DeleteMapping(path = CustomerConstants.DELETE_ACCOUNT_PATH + "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public WebResponse<String> deleteAccountCustomer(Customer customer, @PathVariable String id) {
+        authService.deleteAccountCustomer(customer);
+        return WebResponse.<String>builder().data("OK").build();
+    }
+
 }

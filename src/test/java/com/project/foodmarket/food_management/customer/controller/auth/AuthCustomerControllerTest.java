@@ -49,7 +49,7 @@ public class AuthCustomerControllerTest {
         }
 
         @Test
-        void loginFailedUserNotFoundTest() throws Exception {
+        void loginFailedCustomerNotFoundTest() throws Exception {
                 CustomerLoginRequest customerLoginRequest = new CustomerLoginRequest();
                 customerLoginRequest.setEmail("test@gmail.com");
                 customerLoginRequest.setPassword("secretPassword");
@@ -125,6 +125,7 @@ public class AuthCustomerControllerTest {
 
                                         assertNull(response.getError());
                                         assertNotNull(response.getData().getToken());
+                                        assertNotNull(response.getData().getTokenExpiredAt());
 
                                         Customer customerDb = customerRepository.findByEmail("test@gmail.com")
                                                         .orElse(null);
@@ -217,7 +218,7 @@ public class AuthCustomerControllerTest {
         }
 
         @Test
-        void updateUserFailedWrongEmailFormat() throws Exception {
+        void updateCustomerFailedWrongEmailFormat() throws Exception {
                 String customerId = "test26138f";
                 Customer customer = new Customer();
                 customer.setId(customerId);
@@ -250,7 +251,7 @@ public class AuthCustomerControllerTest {
         }
 
         @Test
-        void updateUserSuccess() throws Exception {
+        void updateCustomerSuccess() throws Exception {
                 String customerId = "test26138f";
                 Customer customer = new Customer();
                 customer.setId(customerId);
@@ -286,8 +287,70 @@ public class AuthCustomerControllerTest {
                                         Customer customerDb = customerRepository.findByEmail("hello@gmail.com")
                                                         .orElse(null);
 
-                                        assertNotNull(customerDb);                                   
+                                        assertNotNull(customerDb);
                                         assertTrue(BCrypt.checkpw("hello_world_2026", customerDb.getPassword()));
+                                });
+        }
+
+        @Test
+        void deleteAccountFailed() throws Exception {
+                String customerId = "test26138f";
+                Customer customer = new Customer();
+                customer.setId(customerId);
+                customer.setEmail("test@gmail.com");
+                customer.setUsername("testhello");
+                customer.setPassword(BCrypt.hashpw("helloworld", BCrypt.gensalt()));
+                customer.setName("test2");
+                customer.setToken(
+                                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxMTRzZmFhIiwiaXNzdWVyIjoiZm9vZC1tYXJrZXQiLCJzdWJqZWN0IjoidGVzdGhlbGxvIn0.uqcz2KXo52I_M2zp7yd9V8dyluifrG8yPNBs-2VeUnw");
+                customer.setTokenExpiredAt(System.currentTimeMillis() + 100000000L);
+                customerRepository.save(customer);
+
+                mockMvc.perform(delete(CustomerConstants.DELETE_ACCOUNT_PATH + "/{id}", customerId)
+                                .accept(MediaType.APPLICATION_JSON))
+                                .andExpectAll(
+                                                status().isUnauthorized())
+                                .andDo(result -> {
+                                        WebResponse<String> response = objectMapper.readValue(
+                                                        result.getResponse().getContentAsString(),
+                                                        new TypeReference<WebResponse<String>>() {
+                                                        });
+                                        assertNotNull(response.getError());
+                                });
+        }
+
+        @Test
+        void deleteAccountSuccess() throws Exception {
+                String customerId = "test26138f";
+                Customer customer = new Customer();
+                customer.setId(customerId);
+                customer.setEmail("test@gmail.com");
+                customer.setUsername("testhello");
+                customer.setPassword(BCrypt.hashpw("helloworld", BCrypt.gensalt()));
+                customer.setName("test2");
+                customer.setToken(
+                                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxMTRzZmFhIiwiaXNzdWVyIjoiZm9vZC1tYXJrZXQiLCJzdWJqZWN0IjoidGVzdGhlbGxvIn0.uqcz2KXo52I_M2zp7yd9V8dyluifrG8yPNBs-2VeUnw");
+                customer.setTokenExpiredAt(System.currentTimeMillis() + 100000000L);
+                customerRepository.save(customer);
+
+                mockMvc.perform(
+                                delete(CustomerConstants.DELETE_ACCOUNT_PATH + "/{id}", customerId)
+                                                .header("Authorization", "Bearer " + customer.getToken())
+                                                .accept(MediaType.APPLICATION_JSON))
+                                .andExpectAll(
+                                                status().isOk())
+                                .andDo(result -> {
+                                        WebResponse<String> response = objectMapper
+                                                        .readValue(result.getResponse().getContentAsString(),
+                                                                        new TypeReference<WebResponse<String>>() {
+                                                                        });
+                                        assertNull(response.getError());
+                                        assertEquals("OK", response.getData());
+
+                                        Customer customerDb = customerRepository.findByEmail("test@gmail.com")
+                                                        .orElse(null);
+
+                                        assertNull(customerDb);
                                 });
         }
 }

@@ -10,6 +10,10 @@ import com.project.foodmarket.food_management.model.customer.CustomerUpdateReque
 
 public interface AuthService {
     public TokenResponse login(@RequestBody CustomerLoginRequest request);
+
     public void logout(Customer customer);
+
     public CustomerResponse update(Customer customer, @RequestBody CustomerUpdateRequest request);
+
+    public void deleteAccountCustomer(Customer customer);
 }
