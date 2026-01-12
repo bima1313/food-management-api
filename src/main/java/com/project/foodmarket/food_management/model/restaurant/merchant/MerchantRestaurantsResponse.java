@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MerchantRestaurantResponse {
+public class MerchantRestaurantsResponse {
 
     private List<Restaurant> restaurants;
 
