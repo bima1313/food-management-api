@@ -1,9 +1,12 @@
 package com.project.foodmarket.food_management.document;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.project.foodmarket.food_management.model.restaurant.merchant.menu.Menu;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,13 +20,15 @@ public class Restaurant {
     @Id
     private String id;
 
-    private String name;
-    
     private String ownerId;
 
-    private Double rating;
+    private String name;
+
+    private String address;    
 
     private Map<String, Boolean> settings;
-
-    private Menu menu;
+    
+    private Double rating;
+    
+    private List<Menu> menus;
 }
