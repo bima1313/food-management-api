@@ -12,8 +12,9 @@ import org.springframework.web.server.ResponseStatusException;
 import com.project.foodmarket.food_management.configuration.MongoContextHolder;
 import com.project.foodmarket.food_management.document.Restaurant;
 import com.project.foodmarket.food_management.document.User;
+import com.project.foodmarket.food_management.model.restaurant.MerchantRestaurantResponse;
 import com.project.foodmarket.food_management.model.restaurant.RestaurantRegisterRequest;
-import com.project.foodmarket.food_management.model.restaurant.merchant.MerchantRestaurantResponse;
+import com.project.foodmarket.food_management.model.restaurant.merchant.MerchantRestaurantsResponse;
 import com.project.foodmarket.food_management.repository.RestaurantRepository;
 import com.project.foodmarket.food_management.service.ValidationService;
 import com.project.foodmarket.food_management.service.restaurant.RestaurantService;
@@ -45,15 +46,23 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public MerchantRestaurantResponse getMerchantRestaurants(User user) {
+    public MerchantRestaurantsResponse getMerchantRestaurants(User user) {
         List<Restaurant> ownerRestaurants = restaurantRepository.findAllByOwnerId(user.getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Restaurants not found"));
 
         if (!ownerRestaurants.isEmpty()) {
-            return MerchantRestaurantResponse.builder().restaurants(ownerRestaurants).build();
+            return MerchantRestaurantsResponse.builder().restaurants(ownerRestaurants).build();
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Restaurants not found");
         }
+    }
+
+    @Override
+    public MerchantRestaurantResponse getMerchantRestaurant(String restaurantId) {
+        Restaurant ownerRestaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Restaurant not found"));
+
+        return MerchantRestaurantResponse.builder().restaurant(ownerRestaurant).build();
     }
 
 }
