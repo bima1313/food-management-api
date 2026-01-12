@@ -51,10 +51,9 @@ public class RestaurantControllerTest {
     void registerUnauthorizedTokenNotSend() throws Exception {
         RestaurantRegisterRequest request = new RestaurantRegisterRequest();
         request.setName("starbucks");
-        request.setAddress("M.H. Thamrin Street, Jakarta, Indonesia");
+                request.setAddress("M.H. Thamrin Street Number 25A, Jakarta, Indonesia");
         request.setSettings(Map.of(
                 "isDineInEnabled", true));
-        request.setRating(4.8);
 
         mockMvc.perform(post(RestaurantConstants.REGISTER_PATH).accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(request)))
@@ -69,17 +68,15 @@ public class RestaurantControllerTest {
     @Test
     void registerSuccess() throws Exception {
         User user = new User();
-        user.setToken(
-                "eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJjNmQ4YTM4My1hYWQ3LTQ4N2UtODBhZS00NWY5ZjViZTg3MzgiLCJpc3MiOiJmb29kLW1hcmtldCIsInN1YiI6ImhlbGxvd29ybGQiLCJhdWQiOlsidXNlciJdLCJleHAiOjE3Njg3NjMzMzQsIm5iZiI6MTc2ODE1ODUzNCwiaWF0IjoxNzY4MTU4NTM0fQ.KFtqJoo7X75a10BSoLRav6v817U2m86GDrfy0hsg4a148TK3IWX-57VIWoka1qb3");
-        user.setTokenExpiredAt(1768763335093L);
+        user.setToken("eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJjNmQ4YTM4My1hYWQ3LTQ4N2UtODBhZS00NWY5ZjViZTg3MzgiLCJpc3MiOiJmb29kLW1hcmtldCIsInN1YiI6ImhlbGxvd29ybGQiLCJhdWQiOlsidXNlciJdLCJleHAiOjE3Njg3NjMzMzQsIm5iZiI6MTc2ODE1ODUzNCwiaWF0IjoxNzY4MTU4NTM0fQ.KFtqJoo7X75a10BSoLRav6v817U2m86GDrfy0hsg4a148TK3IWX-57VIWoka1qb3");
+                user.setTokenExpiredAt(1768763335093L);
         userRepository.save(user);
 
         RestaurantRegisterRequest request = new RestaurantRegisterRequest();
         request.setName("starbucks");
-        request.setAddress("M.H. Thamrin Street, Jakarta, Indonesia");
+                request.setAddress("M.H. Thamrin Street Number 25A, Jakarta, Indonesia");
         request.setSettings(Map.of(
                 "isDineInEnabled", true));
-        request.setRating(4.8);
 
         mockMvc.perform(post(RestaurantConstants.REGISTER_PATH).header("Authorization", "Bearer " + user.getToken())
                 .accept(MediaType.APPLICATION_JSON)

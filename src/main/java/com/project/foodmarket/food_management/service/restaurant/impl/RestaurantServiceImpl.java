@@ -29,14 +29,13 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         Restaurant restaurant = new Restaurant();
         restaurant.setId(UUID.randomUUID().toString());
-        restaurant.setName(request.getName());
         restaurant.setOwnerId(userId);
-        restaurant.setRating(request.getRating());
+        restaurant.setName(request.getName());
+        restaurant.setAddress(request.getAddress());        
         restaurant.setSettings(request.getSettings());
 
         MongoContextHolder.setDatabaseName("restaurant");
-        restaurantRepository.save(restaurant);        
+        restaurantRepository.save(restaurant);
         MongoContextHolder.clear();
     }
-    
 }

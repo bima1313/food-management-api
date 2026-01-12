@@ -4,7 +4,6 @@ import java.util.Map;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,8 +25,5 @@ public class RestaurantRegisterRequest {
     private String address;
 
     @NotEmpty
-    private Map<String, Boolean> settings;
-
-    @NotNull
-    private Double rating;
+    private Map<String, Boolean> settings;   
 }
