@@ -4,31 +4,35 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.foodmarket.food_management.annotation.CurrentUser;
 import com.project.foodmarket.food_management.constants.RestaurantConstants;
+import com.project.foodmarket.food_management.document.User;
 import com.project.foodmarket.food_management.model.WebResponse;
 import com.project.foodmarket.food_management.model.restaurant.RestaurantRegisterRequest;
+import com.project.foodmarket.food_management.model.restaurant.merchant.MerchantRestaurantResponse;
 import com.project.foodmarket.food_management.service.restaurant.RestaurantService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @RestController
 public class RestaurantController {
-    
+
     @Autowired
     private RestaurantService restaurantService;
-    
-    @PostMapping(
-        path = RestaurantConstants.REGISTER_PATH,
-        produces = MediaType.APPLICATION_JSON_VALUE,
-        consumes = MediaType.APPLICATION_JSON_VALUE
-    )
+
+    @PostMapping(path = RestaurantConstants.REGISTER_PATH, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public WebResponse<String> register(@CurrentUser String userId, @RequestBody RestaurantRegisterRequest request) {
-        restaurantService.register(userId,request);
-        
+        restaurantService.register(userId, request);
+
         return WebResponse.<String>builder().data("OK").build();
     }
-    
+
+    @GetMapping(path = RestaurantConstants.MERCHANT_BASE_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
+    public WebResponse<MerchantRestaurantResponse> getMerchantRestaurants(User user) {
+        MerchantRestaurantResponse merchantRestaurants = restaurantService.getMerchantRestaurants(user);
+
+        return WebResponse.<MerchantRestaurantResponse>builder().data(merchantRestaurants).build();
+    }
 }
