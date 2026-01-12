@@ -2,7 +2,7 @@
 
 ## Register User
 
-Endpoint : POST /api/users
+Endpoint : POST /api/users/register
 
 Request Body :
 
@@ -65,7 +65,7 @@ Response Body (Failed, 401) :
 
 ## Get User
 
-Endpoint : GET /api/users/{userID}
+Endpoint : GET /api/users/profile
 
 Request Header :
 
@@ -93,7 +93,7 @@ Response Body (Failed, 401) :
 
 ## Update User
 
-Endpoint : PATCH /api/users/{userID}
+Endpoint : PATCH /api/users/profile
 
 Request Header :
 
@@ -147,7 +147,7 @@ Response Body (Success) :
 
 ## Delete User
 
-Endpoint : DELETE /api/auth/{userID}
+Endpoint : DELETE /api/auth
 
 Request Header :
 

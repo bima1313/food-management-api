@@ -202,7 +202,7 @@ public class AuthUserControllerTest {
 
                 UserUpdateRequest request = new UserUpdateRequest();
 
-                mockMvc.perform(patch(UserConstants.BASE_PATH + "/{id}", userId)
+                mockMvc.perform(patch(UserConstants.UPDATE_PATH, userId)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request)))
@@ -234,7 +234,7 @@ public class AuthUserControllerTest {
                 UserUpdateRequest request = new UserUpdateRequest();
                 request.setEmail("hello@gmailcom");
 
-                mockMvc.perform(patch(UserConstants.BASE_PATH + "/{id}", userId)
+                mockMvc.perform(patch(UserConstants.UPDATE_PATH, userId)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
@@ -269,7 +269,7 @@ public class AuthUserControllerTest {
                 request.setName("world");
                 request.setPassword("hello_world_2026");
 
-                mockMvc.perform(patch(UserConstants.BASE_PATH + "/{id}", userId)
+                mockMvc.perform(patch(UserConstants.UPDATE_PATH, userId)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
@@ -306,7 +306,7 @@ public class AuthUserControllerTest {
                 user.setTokenExpiredAt(System.currentTimeMillis() + 100000000L);
                 userRepository.save(user);
 
-                mockMvc.perform(delete(UserConstants.DELETE_ACCOUNT_PATH + "/{id}", userId)
+                mockMvc.perform(delete(UserConstants.DELETE_ACCOUNT_PATH, userId)
                                 .accept(MediaType.APPLICATION_JSON))
                                 .andExpectAll(
                                                 status().isUnauthorized())
@@ -334,7 +334,7 @@ public class AuthUserControllerTest {
                 userRepository.save(user);
 
                 mockMvc.perform(
-                                delete(UserConstants.DELETE_ACCOUNT_PATH + "/{id}", userId)
+                                delete(UserConstants.DELETE_ACCOUNT_PATH, userId)
                                                 .header("Authorization", "Bearer " + user.getToken())
                                                 .accept(MediaType.APPLICATION_JSON))
                                 .andExpectAll(

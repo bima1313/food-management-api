@@ -49,7 +49,7 @@ public class UserServiceTest {
         void registerBadRequestTest() throws Exception {
                 UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
 
-                mockMvc.perform(post(UserConstants.BASE_PATH)
+                mockMvc.perform(post(UserConstants.REGISTER_PATH)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(userRegisterRequest))).andExpectAll(
@@ -72,7 +72,7 @@ public class UserServiceTest {
                 userRegisterRequest.setPassword("hello41223");
                 userRegisterRequest.setName("world");
 
-                mockMvc.perform(post(UserConstants.BASE_PATH)
+                mockMvc.perform(post(UserConstants.REGISTER_PATH)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(userRegisterRequest))).andExpectAll(
@@ -102,7 +102,7 @@ public class UserServiceTest {
                 userRegisterRequest.setPassword("hello41223");
                 userRegisterRequest.setName("world");
 
-                mockMvc.perform(post(UserConstants.BASE_PATH)
+                mockMvc.perform(post(UserConstants.REGISTER_PATH)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(userRegisterRequest))).andExpectAll(
@@ -125,7 +125,7 @@ public class UserServiceTest {
                 userRegisterRequest.setPassword(BCrypt.hashpw("hello41223", BCrypt.gensalt()));
                 userRegisterRequest.setName("world");
 
-                mockMvc.perform(post(UserConstants.BASE_PATH).accept(MediaType.APPLICATION_JSON)
+                mockMvc.perform(post(UserConstants.REGISTER_PATH).accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(userRegisterRequest)))
                                 .andExpectAll(status().isOk()).andDo(result -> {
@@ -142,7 +142,7 @@ public class UserServiceTest {
         @Test
         void getUserUnauthorized() throws Exception {
                 String id = "test26138f";
-                mockMvc.perform(get(UserConstants.BASE_PATH + "/{id}", id)
+                mockMvc.perform(get(UserConstants.GET_USER_PATH, id)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .header("Authorization",
                                                 "not found"))
@@ -160,7 +160,7 @@ public class UserServiceTest {
         @Test
         void getUserUnauthorizedTokenNotSend() throws Exception {
                 String id = "test26138f";
-                mockMvc.perform(get(UserConstants.BASE_PATH + "/{id}", id)
+                mockMvc.perform(get(UserConstants.GET_USER_PATH, id)
                                 .accept(MediaType.APPLICATION_JSON))
                                 .andExpectAll(status().isUnauthorized())
                                 .andDo(result -> {
@@ -186,7 +186,7 @@ public class UserServiceTest {
                 user.setTokenExpiredAt(System.currentTimeMillis() + 100000000L);
                 userRepository.save(user);
 
-                mockMvc.perform(get(UserConstants.BASE_PATH + "/{id}", id)
+                mockMvc.perform(get(UserConstants.GET_USER_PATH, id)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer " + user.getToken()))
                                 .andExpectAll(status().isOk())
@@ -215,7 +215,7 @@ public class UserServiceTest {
                 user.setTokenExpiredAt(System.currentTimeMillis() - 100000000L);
                 userRepository.save(user);
 
-                mockMvc.perform(get(UserConstants.BASE_PATH + "/{id}", id)
+                mockMvc.perform(get(UserConstants.GET_USER_PATH, id)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .header("Authorization","Bearer " + user.getToken()))
                                 .andExpectAll(status().isUnauthorized())
