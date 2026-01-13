@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.foodmarket.food_management.annotation.CurrentUser;
 import com.project.foodmarket.food_management.constants.RestaurantConstants;
+import com.project.foodmarket.food_management.document.User;
 import com.project.foodmarket.food_management.model.WebResponse;
 import com.project.foodmarket.food_management.model.restaurant.merchant.menu.AddMenuRequest;
 import com.project.foodmarket.food_management.service.restaurant.menu.MenuService;
@@ -24,7 +25,7 @@ public class MenuController {
     @PostMapping(path = RestaurantConstants.MERCHANT_BASE_PATH
             + "/{restaurantId}/menus", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public WebResponse<String> addMenu(
-            @CurrentUser String userId,
+            @CurrentUser User user,
             @PathVariable String restaurantId,
             @RequestPart(name = "data") AddMenuRequest request,
             @RequestPart(name = "imagefile") MultipartFile imageFile) {

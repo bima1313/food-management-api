@@ -25,14 +25,14 @@ public class RestaurantController {
     private RestaurantService restaurantService;
 
     @PostMapping(path = RestaurantConstants.REGISTER_PATH, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public WebResponse<String> register(@CurrentUser String userId, @RequestBody RestaurantRegisterRequest request) {
-        restaurantService.register(userId, request);
+    public WebResponse<String> register(@CurrentUser User user, @RequestBody RestaurantRegisterRequest request) {
+        restaurantService.register(user, request);
 
         return WebResponse.<String>builder().data("OK").build();
     }
 
     @GetMapping(path = RestaurantConstants.MERCHANT_BASE_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
-    public WebResponse<MerchantRestaurantsResponse> getMerchantRestaurants(User user) {
+    public WebResponse<MerchantRestaurantsResponse> getMerchantRestaurants(@CurrentUser User user) {
         MerchantRestaurantsResponse merchantRestaurants = restaurantService.getMerchantRestaurants(user);
 
         return WebResponse.<MerchantRestaurantsResponse>builder().data(merchantRestaurants).build();

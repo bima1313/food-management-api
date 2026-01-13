@@ -4,9 +4,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import com.project.foodmarket.food_management.configuration.MongoContextHolder;
+import com.project.foodmarket.food_management.document.User;
+import com.project.foodmarket.food_management.repository.UserRepository;
 import com.project.foodmarket.food_management.service.JwtService;
 
 import io.jsonwebtoken.Claims;
@@ -18,6 +24,9 @@ public class JwtServiceImpl implements JwtService {
 
     @Value("${spring.application.name}")
     private String secretString;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public String generateToken(
@@ -39,12 +48,17 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public String getUserId(String token) {
+    public User getUser(String token) {
+        MongoContextHolder.setDatabaseName("accounts");
         SecretKey key = Keys.hmacShaKeyFor(secretString.getBytes(StandardCharsets.UTF_16));
 
         Claims claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
+        String userId = claims.getId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized"));
 
-        return claims.getId();
+        MongoContextHolder.clear();
+        return user;
     }
 
     @Override
@@ -52,7 +66,7 @@ public class JwtServiceImpl implements JwtService {
         SecretKey key = Keys.hmacShaKeyFor(secretString.getBytes(StandardCharsets.UTF_16));
 
         Claims claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
-        
+
         return claims.getExpiration().getTime();
     }
 

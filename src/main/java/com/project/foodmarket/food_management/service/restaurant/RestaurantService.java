@@ -9,7 +9,7 @@ import com.project.foodmarket.food_management.model.restaurant.RestaurantRegiste
 import com.project.foodmarket.food_management.model.restaurant.merchant.MerchantRestaurantsResponse;
 
 public interface RestaurantService {
-    public void register(String userId, @RequestBody RestaurantRegisterRequest request);
+    public void register(User user, @RequestBody RestaurantRegisterRequest request);
 
     public MerchantRestaurantsResponse getMerchantRestaurants(User user);
 

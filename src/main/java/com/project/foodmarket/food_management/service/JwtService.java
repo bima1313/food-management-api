@@ -1,5 +1,7 @@
 package com.project.foodmarket.food_management.service;
 
+import com.project.foodmarket.food_management.document.User;
+
 public interface JwtService {
     public String generateToken(
             String targetApplication,
@@ -7,6 +9,6 @@ public interface JwtService {
             String username,
             long tokenExpired);
 
-    public String getUserId(String token);
+    public User getUser(String token);
     public long getExpiration(String token);
 }

@@ -30,26 +30,28 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     @Transactional
-    public void register(String userId, RestaurantRegisterRequest request) {
+    public void register(User user, RestaurantRegisterRequest request) {
         validationService.validate(request);
-
+        
         Restaurant restaurant = new Restaurant();
         restaurant.setId(UUID.randomUUID().toString());
-        restaurant.setOwnerId(userId);
+        restaurant.setOwnerId(user.getId());
         restaurant.setName(request.getName());
         restaurant.setAddress(request.getAddress());
         restaurant.setSettings(request.getSettings());
 
-        MongoContextHolder.setDatabaseName("restaurant");
+        MongoContextHolder.setDatabaseName("restaurants");
         restaurantRepository.save(restaurant);
         MongoContextHolder.clear();
     }
 
     @Override
     public MerchantRestaurantsResponse getMerchantRestaurants(User user) {
+        MongoContextHolder.setDatabaseName("restaurants");
         List<Restaurant> ownerRestaurants = restaurantRepository.findAllByOwnerId(user.getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Restaurants not found"));
-
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Restaurants not found"));
+        
+        MongoContextHolder.clear();
         if (!ownerRestaurants.isEmpty()) {
             return MerchantRestaurantsResponse.builder().restaurants(ownerRestaurants).build();
         } else {
@@ -59,9 +61,11 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public MerchantRestaurantResponse getMerchantRestaurant(String restaurantId) {
+        MongoContextHolder.setDatabaseName("restaurants");
         Restaurant ownerRestaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Restaurant not found"));
-
+        MongoContextHolder.clear();
+        
         return MerchantRestaurantResponse.builder().restaurant(ownerRestaurant).build();
     }
 

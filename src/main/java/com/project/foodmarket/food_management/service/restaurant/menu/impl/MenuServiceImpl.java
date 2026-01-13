@@ -36,7 +36,7 @@ public class MenuServiceImpl implements MenuService {
     @Transactional
     public void addMenu(String restaurantId, AddMenuRequest request, MultipartFile imageFile) {
         validationService.validate(request);
-        MongoContextHolder.setDatabaseName("restaurant");
+        MongoContextHolder.setDatabaseName("restaurants");
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Restaurant not found"));
 
