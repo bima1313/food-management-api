@@ -35,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public TokenResponse login(UserLoginRequest request) {
         validationService.validate(request);
-        MongoContextHolder.setDatabaseName("account");
+        MongoContextHolder.setDatabaseName("accounts");
 
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email and Password was wrong"));
@@ -61,6 +61,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void logout(User user) {
+        MongoContextHolder.setDatabaseName("accounts");
         user.setToken(null);
         user.setTokenExpiredAt(0);
 
@@ -71,6 +72,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public UserResponse update(User user, UserUpdateRequest request) {
         validationService.validate(request);
+        MongoContextHolder.setDatabaseName("accounts");
 
         if (Objects.nonNull(request.getEmail())) {
             user.setEmail(request.getEmail());
@@ -94,9 +96,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void deleteAccountUser(User user) {
+        MongoContextHolder.setDatabaseName("accounts");
         userRepository.delete(user);
         MongoContextHolder.clear();
     }
-
-
 }

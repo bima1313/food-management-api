@@ -2,6 +2,7 @@ package com.project.foodmarket.food_management.controller.user.auth;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.foodmarket.food_management.annotation.CurrentUser;
 import com.project.foodmarket.food_management.constants.UserConstants;
 import com.project.foodmarket.food_management.document.User;
 import com.project.foodmarket.food_management.model.TokenResponse;
@@ -35,7 +36,7 @@ public class AuthUserController {
     }
 
     @PatchMapping(path = UserConstants.UPDATE_PATH, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public WebResponse<UserResponse> update(User user, @RequestBody UserUpdateRequest request) {
+    public WebResponse<UserResponse> update(@CurrentUser User user, @RequestBody UserUpdateRequest request) {
         UserResponse updateResponse = authService.update(user, request);
 
         return WebResponse.<UserResponse>builder().data(updateResponse).build();
@@ -48,7 +49,7 @@ public class AuthUserController {
     }
 
     @DeleteMapping(path = UserConstants.DELETE_ACCOUNT_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
-    public WebResponse<String> deleteAccountUser(User user) {
+    public WebResponse<String> deleteAccountUser(@CurrentUser User user) {
         authService.deleteAccountUser(user);
         return WebResponse.<String>builder().data("OK").build();
     }

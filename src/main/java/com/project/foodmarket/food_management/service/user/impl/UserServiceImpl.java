@@ -28,10 +28,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void register(UserRegisterRequest request) {
-        
+    public void register(UserRegisterRequest request) {        
         validationService.validate(request);
-
+        MongoContextHolder.setDatabaseName("accounts");
+        
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already registered");
         } else if (userRepository.existsByEmail(request.getEmail())) {
@@ -45,7 +45,6 @@ public class UserServiceImpl implements UserService {
         user.setPassword(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()));
         user.setName(request.getName());
 
-        MongoContextHolder.setDatabaseName("account");
         userRepository.save(user);
         MongoContextHolder.clear();
     }

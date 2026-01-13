@@ -2,6 +2,7 @@ package com.project.foodmarket.food_management.controller.user;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.foodmarket.food_management.annotation.CurrentUser;
 import com.project.foodmarket.food_management.constants.UserConstants;
 import com.project.foodmarket.food_management.document.User;
 import com.project.foodmarket.food_management.model.WebResponse;
@@ -29,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping(path = UserConstants.GET_USER_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
-    public WebResponse<UserResponse> get(User user) {
+    public WebResponse<UserResponse> get(@CurrentUser User user) {
         UserResponse userResponse = userService.getUser(user);
         return WebResponse.<UserResponse>builder().data(userResponse).build();
     }
