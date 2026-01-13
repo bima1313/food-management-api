@@ -12,6 +12,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.project.foodmarket.food_management.annotation.CurrentUser;
+import com.project.foodmarket.food_management.document.User;
 import com.project.foodmarket.food_management.service.JwtService;
 
 @Component
@@ -35,14 +36,14 @@ public class CurrentUserResolver implements HandlerMethodArgumentResolver {
         }        
         String token = bearerToken.substring(7);
 
-        String userId = jwtService.getUserId(token);
-        long expiredToken = jwtService.getExpiration(token);        
+        User user = jwtService.getUser(token);
+        long tokenExpired = jwtService.getExpiration(token);        
 
-        if (expiredToken < System.currentTimeMillis()) {
+        if (tokenExpired < System.currentTimeMillis()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
         }
         
-        return userId;
+        return user;
     }
 
 }
