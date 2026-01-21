@@ -1,4 +1,5 @@
-Multi-Vendor Food Marketplace (Personal Project)
+**Multi-Vendor Food Marketplace (Personal Project)**
+
 A scalable, multi-tenant e-commerce ecosystem designed for the food industry. This platform empowers multiple vendors to manage their own digital storefronts while providing a seamless, data-driven ordering experience for customers.
 
 🚀 Key Innovation: Dynamic Pricing Engine
