@@ -1,8 +1,8 @@
-# User API Spec
+# Merchant User API Spec
 
 ## Register User
 
-Endpoint : POST /api/users/register
+Endpoint : POST /api/merchants/register
 
 Request Body :
 
@@ -33,7 +33,7 @@ Response Body (Failed) :
 
 ## Login User
 
-Endpoint : POST /api/auth/users/login
+Endpoint : POST /api/merchants/auth/login
 
 Request Body :
 
@@ -65,7 +65,7 @@ Response Body (Failed, 401) :
 
 ## Get User
 
-Endpoint : GET /api/users/profile
+Endpoint : GET /api/merchants/profile
 
 Request Header :
 
@@ -93,7 +93,7 @@ Response Body (Failed, 401) :
 
 ## Update User
 
-Endpoint : PATCH /api/users/profile
+Endpoint : PATCH /api/merchants/profile
 
 Request Header :
 
@@ -131,7 +131,7 @@ Response Body (Failed, 401) :
 
 ## Logout User
 
-Endpoint : DELETE /api/auth/logout
+Endpoint : DELETE /api/merchants/auth/logout
 
 Request Header :
 
@@ -147,7 +147,7 @@ Response Body (Success) :
 
 ## Delete User
 
-Endpoint : DELETE /api/auth
+Endpoint : DELETE /api/merchants/me
 
 Request Header :
 
