@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "user")
+@Document(collection = "users")
 public class User {
     @Id
     private String id;
@@ -29,5 +29,5 @@ public class User {
 
     private long tokenExpiredAt;
 
-    private RoleEnum role;
+    private String role;
 }

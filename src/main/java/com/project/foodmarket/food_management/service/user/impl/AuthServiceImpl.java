@@ -42,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
 
         if (BCrypt.checkpw(request.getPassword(), user.getPassword())) {
 
-            String token = jwtService.generateToken("user", user.getId(), user.getUsername(),
+            String token = jwtService.generateToken(user.getRole(), user.getId(), user.getUsername(),
                     ExpirationUtils.calculateTokenExpiredDate(7));
 
             user.setToken(token);

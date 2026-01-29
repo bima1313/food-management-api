@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.project.foodmarket.food_management.configuration.MongoContextHolder;
 import com.project.foodmarket.food_management.document.User;
+import com.project.foodmarket.food_management.enums.RoleEnum;
 import com.project.foodmarket.food_management.model.user.UserRegisterRequest;
 import com.project.foodmarket.food_management.model.user.UserResponse;
 import com.project.foodmarket.food_management.repository.UserRepository;
@@ -28,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void register(UserRegisterRequest request) {        
+    public void register(UserRegisterRequest request,RoleEnum role) {        
         validationService.validate(request);
         MongoContextHolder.setDatabaseName("accounts");
         
@@ -44,6 +45,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(request.getUsername());
         user.setPassword(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()));
         user.setName(request.getName());
+        user.setRole(role.name());
 
         userRepository.save(user);
         MongoContextHolder.clear();
