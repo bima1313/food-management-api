@@ -18,11 +18,14 @@ Architecture: RESTful API, Role-Based Access Control (RBAC).
 
 📊 Project Roadmap
 Phase 1: Foundation (Completed ✅)
+
 [✅] Database Schema Design for Users and Restaurants.
 
 [✅] Secure Authentication System (JWT).
 
 [✅] UI integration with Tailwind and Shadcn UI for Login and Register page in Merchant part website.
+
+[✅] User and Merchant Role-Based Access Control (RBAC) Implementation.
 
 Phase 2: Core Features (In Progress 🏗️)
 
@@ -32,17 +35,16 @@ Phase 2: Core Features (In Progress 🏗️)
 
 [ ] Dynamic Pricing Logic: Implementing the backend scheduler for automated price updates.
 
-[ ] Merchant Dashboard: Interface for vendors to manage menus and view basic sales data.
+[ ] Merchant Dashboard: Interface for merchants to manage menus and view basic sales data.
 
-[ ] Order Management: Real-time order flow from customer to vendor.
+[ ] Order Management: Real-time order flow from customer to merchant.
 
-[ ] Role-Based Access Control.
-
-[ ] User, Vendor, and Admin Role Implementation.
-
-[ ] Database Schema Design for Menu (Will be Fixed).
+[ ] Database Schema Design for Menu and Restaurant (Will be Fixed).
 
 Phase 3: Scaling & Analytics (Planned 📅)
+
+[ ] Admin Role-Based Access Control (RBAC) Implementation.
+
 [ ] Sales Analytics: Advanced data visualization for vendors using Recharts.
 
 [ ] Payment Gateway Integration: Secure transactions with Midtrans/Stripe.
@@ -50,8 +52,8 @@ Phase 3: Scaling & Analytics (Planned 📅)
 [ ] Mobile Optimization: Refining the UI for a flawless mobile-first experience.
 
 🏗️ Architecture Highlights
-Multi-Tenancy: Designed to isolate data between different vendors while maintaining a single shared database for scalability.
+Multi-Tenancy: Designed to isolate data between different merchants while maintaining a single shared database for scalability.
 
-Security: Implemented granular access control, ensuring vendors can only access their specific dashboard and data.
+Security: Implemented granular access control, ensuring merchants can only access their specific dashboard and data.
 
 Performance: Utilizing Next.js Server Components and Spring Boot's efficient processing for fast load times.
